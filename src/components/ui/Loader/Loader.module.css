@@ -1,0 +1,47 @@
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.loader {
+  display: inline-block;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  
+  background: conic-gradient(
+    from 0deg,
+    rgba(255, 85, 85, 1) 0deg,
+    rgba(255, 85, 85, 1) 270deg,
+    transparent 270deg,
+    transparent 360deg
+  );
+  
+  mask: radial-gradient(
+    transparent 0%,
+    transparent calc(75% - var(--border-width)),
+    black calc(75% - var(--border-width) + 1px),
+    black 100%
+  );
+}
+
+.large {
+  width: 50px;
+  height: 50px;
+  --border-width: 6px;
+}
+
+.medium {
+  width: 37.5px;
+  height: 37.5px;
+  --border-width: 4.5px;
+}
+
+.small {
+  width: 21.67px;
+  height: 22.33px;
+  --border-width: 3px;
+}
