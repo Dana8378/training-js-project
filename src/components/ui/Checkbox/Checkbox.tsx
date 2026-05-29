@@ -28,7 +28,7 @@ export const Checkbox = ({
         onChange={handleChange}
       />
       <span className={styles.checkbox}>
-        {/* Галочка (SVG) */}
+        {}
         <svg
           className={styles.checkmark}
           width="15"
