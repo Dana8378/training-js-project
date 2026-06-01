@@ -1,5 +1,6 @@
 import styles from './Card.module.css';
 import starIcon from './assets/star-icon.svg';
+import { Link } from '@tanstack/react-router';
 
 export interface CardProps {
   repoName: string;
@@ -19,8 +20,15 @@ export const Card = ({
   const firstLetter = repoName.charAt(0).toUpperCase();
 
   return (
+    <Link
+      to="/repo/$owner/$repoName"
+      params={{
+        owner: userName,
+        repoName: repoName
+      }}
+      className={styles.cardLink}
+    >
     <div className={styles.card}>
-      {}
       <div className={styles.avatarWrapper}>
         {avatarUrl ? (
           <img 
@@ -35,7 +43,6 @@ export const Card = ({
         )}
       </div>
 
-      {}
       <div className={styles.info}>
         <h3 className={styles.repoName}>{repoName}</h3>
         <p className={styles.userName}>{userName}</p>
@@ -51,5 +58,6 @@ export const Card = ({
         </div>
       </div>
     </div>
+    </Link>
   );
 };

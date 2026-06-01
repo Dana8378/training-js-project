@@ -1,0 +1,168 @@
+.page {
+  width: 357px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  padding: 20px 0;
+}
+
+.navigation {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.backButton {
+  width: 50px;
+  height: 50px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.repoTitle {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 700;
+  font-size: 16px;
+  font-family: Roboto;
+}
+
+.avatar {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+}
+
+.stats {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  margin-top: -16px;
+}
+
+.stats > div {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  font-size: 20px;
+  font-family: Roboto;
+  color: #7E7E7E;
+}
+
+.stats img {
+  width: 20px;
+  height: 20px;
+}
+
+.description h3 {
+  font-size: 20px;
+  font-family: Roboto;
+  margin: 0 0 12px 0;
+}
+
+.description p {
+  font-size: 14px;
+  font-family: Roboto;
+  margin: 0;
+}
+
+.calendar h3 {
+  font-size: 20px;
+  font-family: Roboto;
+  margin: 0 0 12px 0;
+}
+
+.calendarPlaceholder {
+  border-radius: 8px;
+}
+
+.months {
+  display: flex;
+  justify-content: space-between;
+  width: 331px;
+  margin: 0 auto;
+}
+
+.monthLabel {
+  font-family: Roboto, sans-serif;
+  font-weight: 400;
+  font-size: 12px;
+  line-height: 100%;
+}
+
+.cells {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  margin-top: 12px;
+}
+
+.cell {
+  width: 8px;
+  height: 8px;
+  border-radius: 2px;
+}
+
+.cell[data-level="0"] { background-color: #CBCBCB; }
+.cell[data-level="1"] { background-color: #63FFD3; }
+.cell[data-level="2"] { background-color: #00C78F; }
+.cell[data-level="3"] { background-color: #007251; }
+
+.contributors h3 {
+  font-size: 20px;
+  font-family: Roboto;
+  margin: 0 0 12px 0;
+}
+
+.avatarList {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.avatarPlaceholder {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: #FF5555;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  font-weight: bold;
+}
+
+.branches h3 {
+  font-family: Roboto;
+  font-size: 20px;
+  margin: 0 0 12px 0;
+}
+
+.branches ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.branches li {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 8px;
+  font-size: 14px;
+  font-family: Roboto;
+}
+
+.protected {
+  font-family: Roboto;
+  font-size: 12px;
+  color: #BEBEBE;
+  border-radius: 4px;
+}

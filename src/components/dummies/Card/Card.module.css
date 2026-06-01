@@ -120,3 +120,8 @@
   letter-spacing: 0%;
   color: rgba(126, 126, 126, 1);
 }
+
+.cardLink {
+  text-decoration: none;
+  display: block;
+}
