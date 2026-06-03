@@ -9,6 +9,7 @@ export interface Repository {
   watchers_count: number;
   forks_count: number;
   open_issues_count: number;
+  language: string | null;
   owner: {
     login: string;
     avatar_url: string;
@@ -17,11 +18,9 @@ export interface Repository {
 }
 
 export interface RepoDetails extends Repository {
-  language: string | null;
   license: {
     name: string;
   } | null;
-  subscribers_count: number;
 }
 
 export interface Branch {
