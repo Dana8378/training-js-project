@@ -2,6 +2,7 @@ import { createFileRoute, useParams, useNavigate } from '@tanstack/react-router'
 import styles from './repo.module.css';
 import { useRepoDetails } from '../hooks/useRepoDetails';
 import { useBranches } from '../hooks/useBranches';
+import { useContributors } from '../hooks/useContributors';
 
 import starIcon from '../assets/icons/star.svg';
 import eyeIcon from '../assets/icons/eye.svg';
@@ -17,6 +18,8 @@ function RepoPage() {
   const { data: repo, isLoading, error } = useRepoDetails(owner, repoName);
 
   const { data: branches, isLoading: branchesLoading } = useBranches(owner, repoName);
+
+  const { data: contributors, isLoading: contributorsLoading } = useContributors(owner, repoName);
 
     if (isLoading) {
     return <div className={styles.loading}>Загрузка...</div>;
@@ -75,14 +78,24 @@ function RepoPage() {
       </div>
 
       <div className={styles.contributors}>
-        <h3>Contributors</h3>
-        <div className={styles.avatarList}>
-          {[...Array(12)].map((_, i) => (
-            <div key={i} className={styles.avatarPlaceholder}>
-              {String.fromCharCode(65 + i % 26)}
-            </div>
-          ))}
-        </div>
+        <h3 className={styles.blockTitle}>Contributors</h3>
+        
+        {contributorsLoading ? (
+          <div className={styles.loadingSmall}>Загрузка контрибьюторов...</div>
+        ) : contributors && contributors.length > 0 ? (
+          <div className={styles.avatarList}>
+            {contributors.map((contributor) => (
+              <img
+                key={contributor.id}
+                src={contributor.avatar_url}
+                alt={contributor.login}
+                className={styles.avatar}
+              />
+            ))}
+          </div>
+        ) : (
+          <div className={styles.noData}>Нет данных о контрибьюторах</div>
+        )}
       </div>
 
       <div className={styles.branches}>

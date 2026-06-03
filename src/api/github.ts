@@ -32,6 +32,12 @@ export interface Branch {
   protected: boolean;
 }
 
+export interface Contributor {
+  id: number;
+  login: string;
+  avatar_url: string;
+}
+
 export async function fetchOrgRepos(orgName: string): Promise<Repository[]> {
   if (!orgName) return [];
   
@@ -64,11 +70,11 @@ export async function fetchCommitActivity(owner: string, repoName: string) {
   return response.json();
 }
 
-export async function fetchContributors(owner: string, repoName: string, limit: number = 20) {
+export async function fetchContributors(owner: string, repoName: string, limit: number = 30): Promise<Contributor[]> {
   const response = await fetch(`${GITHUB_API}/repos/${owner}/${repoName}/contributors?per_page=${limit}`);
   
   if (!response.ok) {
-    return [];
+    throw new Error(`Ошибка загрузки контрибьюторов: ${response.status}`);
   }
   
   return response.json();
