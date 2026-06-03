@@ -1,5 +1,7 @@
 import { createFileRoute, useParams, useNavigate } from '@tanstack/react-router';
 import styles from './repo.module.css';
+import { useRepoDetails } from '../hooks/useRepoDetails';
+import { useBranches } from '../hooks/useBranches';
 
 import starIcon from '../assets/icons/star.svg';
 import eyeIcon from '../assets/icons/eye.svg';
@@ -7,19 +9,26 @@ import forkIcon from '../assets/icons/fork.svg';
 import issueIcon from '../assets/icons/issue.svg';
 import backIcon from '../assets/icons/arrow-back.svg';
 
-const mockData = {
-  name: 'git-repo-name',
-  description: 'My first repository on GitHub!',
-  stars: 123,
-  watchers: 24,
-  forks: 8,
-  issues: 0,
-  owner: { login: 'username', avatar_url: 'https://avatars.githubusercontent.com/u/69631' }
-};
 
 function RepoPage() {
   const { owner, repoName } = useParams({ from: '/repo/$owner/$repoName' });
   const navigate = useNavigate();
+  
+  const { data: repo, isLoading, error } = useRepoDetails(owner, repoName);
+
+  const { data: branches, isLoading: branchesLoading } = useBranches(owner, repoName);
+
+    if (isLoading) {
+    return <div className={styles.loading}>Загрузка...</div>;
+  }
+
+  if (error) {
+    return <div className={styles.error}>Ошибка: {error.message}</div>;
+  }
+
+  if (!repo) {
+    return <div className={styles.error}>Репозиторий не найден</div>;
+  }
 
   return (
     <div className={styles.page}>
@@ -28,21 +37,21 @@ function RepoPage() {
           <img src={backIcon} alt="Back" />
         </button>
         <div className={styles.repoTitle}>
-          <img src={mockData.owner.avatar_url} alt="" className={styles.avatar} />
-          <span>{mockData.name}</span>
+          <img src={repo.owner.avatar_url} alt="" className={styles.avatar} />
+          <span>{repo.name}</span>
         </div>
       </div>
 
       <div className={styles.stats}>
-        <div><img src={starIcon} alt="" /> {mockData.stars}</div>
-        <div><img src={eyeIcon} alt="" /> {mockData.watchers}</div>
-        <div><img src={forkIcon} alt="" /> {mockData.forks}</div>
-        <div><img src={issueIcon} alt="" /> {mockData.issues}</div>
+        <div><img src={starIcon} alt="" /> {repo.stargazers_count.toLocaleString()}</div>
+        <div><img src={eyeIcon} alt="" /> {repo.watchers_count.toLocaleString()}</div>
+        <div><img src={forkIcon} alt="" /> {repo.forks_count.toLocaleString()}</div>
+        <div><img src={issueIcon} alt="" /> {repo.open_issues_count.toLocaleString()}</div>
       </div>
 
       <div className={styles.description}>
         <h3>Description</h3>
-        <p>{mockData.description}</p>
+        <p>{repo.description}</p>
       </div>
 
       <div className={styles.calendar}>
@@ -77,14 +86,23 @@ function RepoPage() {
       </div>
 
       <div className={styles.branches}>
-        <h3>Branches List</h3>
-        <ul>
-          <li>branch-1 <span className={styles.protected}>PROTECTED</span></li>
-          <li>branch-2</li>
-          <li>branch-3</li>
-          <li>branch-4 <span className={styles.protected}>PROTECTED</span></li>
-          <li>branch-5</li>
-        </ul>
+        <h3 className={styles.blockTitle}>Branches List</h3>
+        {branchesLoading ? (
+          <div className={styles.loadingSmall}>Загрузка веток...</div>
+        ) : branches && branches.length > 0 ? (
+          <ul className={styles.branchList}>
+            {branches.map((branch) => (
+              <li key={branch.name} className={styles.branchItem}>
+                <span className={styles.branchName}>{branch.name}</span>
+                {branch.protected && (
+                  <span className={styles.protected}>PROTECTED</span>
+                )}
+              </li>
+            ))}
+          </ul>
+        ) : (
+          <div className={styles.noData}>Нет веток</div>
+        )}
       </div>
     </div>
   );

@@ -6,33 +6,8 @@ import { Input } from '../components/ui/Input';
 import { IconButton } from '../components/ui/IconButton';
 import { MultiDropdown, type Option } from '../components/ui/MultiDropdown';
 import { Card } from '../components/dummies/Card';
+import { useRepos } from '../hooks/useRepos';
 
-const mockRepos = [
-  {
-    repoName: 'repo-name',
-    userName: 'test-user',
-    stars: 123,
-    updatedAt: '21 Jul',
-  },
-  {
-    repoName: 'name-repo',
-    userName: 'test-user',
-    stars: 124,
-    updatedAt: '21 Jul',
-  },
-  {
-    repoName: 'test-repo',
-    userName: 'test-user',
-    stars: 125,
-    updatedAt: '21 Jul',
-  },
-  {
-    repoName: 'very-long-repository-name-that-exceeds-limit',
-    userName: 'test-user',
-    stars: 126,
-    updatedAt: '21 Jul',
-  },
-];
 
 const languageOptions: Option[] = [
   { id: 'c', label: 'C' },
@@ -46,20 +21,26 @@ export const Route = createFileRoute('/')({
 });
 
 function IndexComponent() {
-  const [searchValue, setSearchValue] = useState('');
+  const [orgName, setOrgName] = useState('');
   const [selectedLanguages, setSelectedLanguages] = useState<Option[]>([]);
 
+  const { data: repos, isLoading, error, refetch } = useRepos(orgName);
+
   const handleSearch = () => {
-    console.log('Поиск:', searchValue);
-    console.log('Выбранные языки:', selectedLanguages);
+    refetch();
+  };
+
+  const formatDate = (dateString: string) => {
+    const date = new Date(dateString);
+    return `${date.getDate()} ${date.toLocaleString('en-US', { month: 'short' })}`;
   };
 
   return (
     <div className={styles.page}>
       <div className={styles.searchBlock}>
         <Input
-          value={searchValue}
-          onChange={setSearchValue}
+          value={orgName}
+          onChange={setOrgName}
           placeholder="Enter organization name"
         />
         <IconButton onClick={handleSearch} />
@@ -78,14 +59,18 @@ function IndexComponent() {
       </div>
 
       <div className={styles.cardsBlock}>
-        {mockRepos.map((repo, index) => (
+        {isLoading && <div className={styles.loading}>Загрузка...</div>}
+        
+        {error && <div className={styles.error}>Ошибка: {error.message}</div>}
+
+        {repos && repos.map((repo) => (
           <Card
-            key={`${repo.userName}-${repo.repoName}-${index}`}
-            repoName={repo.repoName}
-            userName={repo.userName}
-            stars={repo.stars}
-            updatedAt={repo.updatedAt}
-            avatarUrl={repo.avatarUrl}
+            key={repo.id}
+            repoName={repo.name}
+            userName={repo.owner.login}
+            stars={repo.stargazers_count}
+            updatedAt={formatDate(repo.updated_at)}
+            avatarUrl={repo.owner.avatar_url}
           />
         ))}
       </div>
